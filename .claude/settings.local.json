@@ -4,7 +4,8 @@
       "PowerShell(New-Item *)",
       "Skill(redesign-existing-projects)",
       "Bash(npx astro *)",
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "Bash(dir public *)"
     ]
   }
 }

@@ -2,14 +2,18 @@
 /**
  * Navbar.astro — Floating fluid island. Detached glass pill, hamburger morph.
  */
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
+const HOME = `${BASE}/`;
+
 const links = [
-  { href: '/', label: 'Inicio' },
-  { href: '/servicios', label: 'Servicios' },
-  { href: '/sobre-nosotros', label: 'Bufete' },
-  { href: '/contacto', label: 'Contacto' },
+  { href: HOME, label: 'Inicio' },
+  { href: `${BASE}/servicios`, label: 'Servicios' },
+  { href: `${BASE}/sobre-nosotros`, label: 'Bufete' },
+  { href: `${BASE}/contacto`, label: 'Contacto' },
 ];
 
-const current = Astro.url.pathname.replace(/\/$/, '') || '/';
+const rawPath = Astro.url.pathname.replace(/\/$/, '');
+const current = rawPath === BASE || rawPath === '' ? HOME : rawPath;
 ---
 
 <header
@@ -27,9 +31,9 @@ const current = Astro.url.pathname.replace(/\/$/, '') || '/';
       data-navbar-shell
     >
       <!-- BRAND LOCKUP (oficial) -->
-      <a href="/" class="flex items-center group" aria-label="Inicio Bufete Jurídico Villatoro y Asociados">
+      <a href={HOME} class="flex items-center group" aria-label="Inicio Bufete Jurídico Villatoro y Asociados">
         <img
-          src="/images/logo-horizontal.png"
+          src={`${BASE}/images/logo-horizontal.png`}
           alt="Bufete Jurídico Villatoro y Asociados"
           class="h-9 lg:h-11 w-auto object-contain transition-opacity duration-500 ease-editorial group-hover:opacity-85"
           width="440" height="220"
@@ -54,7 +58,7 @@ const current = Astro.url.pathname.replace(/\/$/, '') || '/';
             </a>
           );
         })}
-        <a href="/contacto" class="btn-ink ml-3 !py-1.5 !pl-5 !text-xs">
+        <a href={`${BASE}/contacto`} class="btn-ink ml-3 !py-1.5 !pl-5 !text-xs">
           Consulta
           <span class="btn-dot !h-7 !w-7">
             <svg viewBox="0 0 16 16" class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -116,7 +120,7 @@ const current = Astro.url.pathname.replace(/\/$/, '') || '/';
         <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-ink/55">
           +504 9840-4016
         </p>
-        <a href="/contacto" class="btn-ink !py-1.5 !pl-5 !text-xs">
+        <a href={`${BASE}/contacto`} class="btn-ink !py-1.5 !pl-5 !text-xs">
           Consulta
           <span class="btn-dot !h-7 !w-7">
             <svg viewBox="0 0 16 16" class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
