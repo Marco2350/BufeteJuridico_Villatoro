@@ -4,6 +4,7 @@
  * Foto del abogado dominante, ocupa el lado derecho desde el borde.
  * Copy condensado a la izquierda. Todo visible en viewport.
  */
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
 const phone = '50498404016';
 const whatsappLink = `https://wa.me/${phone}?text=${encodeURIComponent(
   'Hola, me gustaría agendar una consulta legal.'
@@ -39,7 +40,7 @@ const kpis = [
             Honduras · Est. 2021
           </span>
           <img
-            src="/images/logo-mark-white.png"
+            src={`${BASE}/images/logo-mark-white.png`}
             alt="Sello DV — Villatoro y Asociados"
             class="h-10 w-10 object-contain opacity-80"
             width="80" height="80"
@@ -74,7 +75,7 @@ const kpis = [
                 </svg>
               </span>
             </a>
-            <a href="/servicios" class="btn-ghost">
+            <a href={`${BASE}/servicios`} class="btn-ghost">
               Áreas de práctica
             </a>
           </div>
@@ -101,7 +102,7 @@ const kpis = [
           <div class="bezel-inner overflow-hidden h-full">
             <div class="relative h-full min-h-[420px] lg:min-h-0">
               <img
-                src="/images/abogado-pie.png"
+                src={`${BASE}/images/abogado-pie.png`}
                 alt="Lic. Darwin Villatoro, abogado titular del Bufete Villatoro & Asociados en su despacho, San Pedro Sula"
                 width="1200"
                 height="800"

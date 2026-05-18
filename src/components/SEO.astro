@@ -16,10 +16,11 @@ export interface Props {
   noindex?: boolean;
 }
 
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
 const {
   title,
   description,
-  image = '/images/abogado-hero.png',
+  image = `${BASE}/images/abogado-hero.png`,
   canonical,
   keywords = [
     'abogado en Honduras',
@@ -34,21 +35,22 @@ const {
   noindex = false,
 } = Astro.props;
 
-const siteURL = Astro.site?.toString().replace(/\/$/, '') ?? 'https://villatoroasociados.hn';
+const siteURL = Astro.site?.toString().replace(/\/$/, '') ?? 'https://mddesarrolloshn.com';
 const pageURL = canonical ?? new URL(Astro.url.pathname, Astro.site ?? siteURL).toString();
 const imageURL = image.startsWith('http') ? image : `${siteURL}${image}`;
 const fullTitle = title.includes('Villatoro') ? title : `${title} | Bufete Jurídico Villatoro & Asociados`;
+const baseURLAbsolute = `${siteURL}${BASE}`;
 
 // JSON-LD: LegalService — clave para SEO local de abogados
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'LegalService',
-  '@id': `${siteURL}/#legalservice`,
+  '@id': `${baseURLAbsolute}/#legalservice`,
   name: 'Bufete Jurídico Villatoro & Asociados — Abogados y Notarios',
   description:
     'Bufete legal en Honduras especializado en derecho penal, civil, laboral, familiar, migración y asesoría empresarial. 5 años de experiencia, más de 15 casos resueltos.',
-  url: siteURL,
-  logo: `${siteURL}/favicon.svg`,
+  url: baseURLAbsolute,
+  logo: `${siteURL}${BASE}/favicon.svg`,
   image: imageURL,
   telephone: '+504 9840-4016',
   priceRange: '$$',

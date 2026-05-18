@@ -2,6 +2,7 @@
 /**
  * FAQ.astro — Acordeón editorial. Sticky-title izquierda + listado tipográfico derecha.
  */
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
 const faqs = [
   {
     q: '¿Cuánto cuesta una consulta inicial?',
@@ -48,7 +49,7 @@ const faqs = [
           Si su duda no aparece aquí, escríbanos por WhatsApp o agende una
           consulta gratuita. Respondemos en menos de 24 horas hábiles.
         </p>
-        <a href="/contacto" class="btn-ink mt-10">
+        <a href={`${BASE}/contacto`} class="btn-ink mt-10">
           Hacer mi pregunta
           <span class="btn-dot">
             <svg viewBox="0 0 16 16" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
