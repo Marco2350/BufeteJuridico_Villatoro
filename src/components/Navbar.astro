@@ -1,0 +1,192 @@
+---
+/**
+ * Navbar.astro — Floating fluid island. Detached glass pill, hamburger morph.
+ */
+const links = [
+  { href: '/', label: 'Inicio' },
+  { href: '/servicios', label: 'Servicios' },
+  { href: '/sobre-nosotros', label: 'Bufete' },
+  { href: '/contacto', label: 'Contacto' },
+];
+
+const current = Astro.url.pathname.replace(/\/$/, '') || '/';
+---
+
+<header
+  id="site-header"
+  class="fixed inset-x-0 top-0 z-40 pointer-events-none"
+  data-navbar
+>
+  <div class="container-x pointer-events-auto pt-5 lg:pt-6">
+    <div
+      class="flex items-center justify-between gap-4
+             rounded-full pl-5 pr-2 py-2
+             bg-bone-50/70 backdrop-blur-xl ring-1 ring-ink/10
+             transition-all duration-700 ease-editorial
+             data-[scrolled=true]:bg-bone-50/90 data-[scrolled=true]:shadow-soft"
+      data-navbar-shell
+    >
+      <!-- BRAND LOCKUP (oficial) -->
+      <a href="/" class="flex items-center group" aria-label="Inicio Bufete Jurídico Villatoro y Asociados">
+        <img
+          src="/images/logo-horizontal.png"
+          alt="Bufete Jurídico Villatoro y Asociados"
+          class="h-9 lg:h-11 w-auto object-contain transition-opacity duration-500 ease-editorial group-hover:opacity-85"
+          width="440" height="220"
+        />
+      </a>
+
+      <!-- DESKTOP NAV -->
+      <nav class="hidden lg:flex items-center gap-1" aria-label="Navegación principal">
+        {links.map((link) => {
+          const active = link.href === current;
+          return (
+            <a
+              href={link.href}
+              class:list={[
+                'relative px-4 py-2 rounded-full text-sm font-medium tracking-tight transition-all duration-500 ease-editorial',
+                active
+                  ? 'text-ink bg-ink/5'
+                  : 'text-ink/65 hover:text-ink hover:bg-ink/5',
+              ]}
+            >
+              {link.label}
+            </a>
+          );
+        })}
+        <a href="/contacto" class="btn-ink ml-3 !py-1.5 !pl-5 !text-xs">
+          Consulta
+          <span class="btn-dot !h-7 !w-7">
+            <svg viewBox="0 0 16 16" class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 8h10M9 4l4 4-4 4"/>
+            </svg>
+          </span>
+        </a>
+      </nav>
+
+      <!-- MOBILE TOGGLE — morphing hamburger -->
+      <button
+        type="button"
+        class="lg:hidden relative inline-flex items-center justify-center h-10 w-10 rounded-full bg-ink text-bone-50 ring-1 ring-ink/20"
+        aria-label="Abrir menú"
+        aria-controls="mobile-menu"
+        aria-expanded="false"
+        data-menu-toggle
+      >
+        <span class="absolute left-1/2 top-1/2 h-px w-4 -translate-x-1/2 -translate-y-[5px] bg-current transition-all duration-500 ease-editorial" data-bar-top></span>
+        <span class="absolute left-1/2 top-1/2 h-px w-4 -translate-x-1/2 translate-y-[3px] bg-current transition-all duration-500 ease-editorial" data-bar-bot></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- MOBILE OVERLAY MENU — full-screen editorial -->
+  <div
+    id="mobile-menu"
+    class="lg:hidden fixed inset-0 z-50 hidden pointer-events-auto"
+    aria-hidden="true"
+    data-mobile-menu
+  >
+    <div class="absolute inset-0 bg-bone/95 backdrop-blur-2xl" data-menu-backdrop></div>
+    <nav
+      class="relative h-full w-full flex flex-col px-8 pt-28 pb-12"
+      aria-label="Navegación móvil"
+    >
+      <span class="eyebrow mb-12">
+        <span class="num">00</span>
+        <span class="bar"></span>
+        Menú
+      </span>
+      <ul class="flex flex-col gap-6">
+        {links.map((link, i) => (
+          <li
+            class="overflow-hidden transition-all duration-700 ease-editorial opacity-0 translate-y-8 data-[open=true]:opacity-100 data-[open=true]:translate-y-0"
+            style={`transition-delay: ${100 + i * 80}ms`}
+            data-menu-item
+          >
+            <a
+              href={link.href}
+              class="block font-display text-5xl text-ink hover:text-oxblood transition-colors duration-300"
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+      <div class="mt-auto pt-12 border-t border-ink/10 flex items-center justify-between">
+        <p class="font-mono text-[11px] uppercase tracking-[0.2em] text-ink/55">
+          +504 9840-4016
+        </p>
+        <a href="/contacto" class="btn-ink !py-1.5 !pl-5 !text-xs">
+          Consulta
+          <span class="btn-dot !h-7 !w-7">
+            <svg viewBox="0 0 16 16" class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 8h10M9 4l4 4-4 4"/>
+            </svg>
+          </span>
+        </a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<!-- Spacer for floating navbar -->
+<div class="h-[88px] lg:h-[96px]" aria-hidden="true"></div>
+
+<script is:inline>
+  (function () {
+    const shell = document.querySelector('[data-navbar-shell]');
+    const toggle = document.querySelector('[data-menu-toggle]');
+    const menu = document.querySelector('[data-mobile-menu]');
+    const backdrop = document.querySelector('[data-menu-backdrop]');
+    const items = document.querySelectorAll('[data-menu-item]');
+    const barTop = document.querySelector('[data-bar-top]');
+    const barBot = document.querySelector('[data-bar-bot]');
+
+    const onScroll = () => {
+      if (!shell) return;
+      shell.dataset.scrolled = window.scrollY > 16 ? 'true' : 'false';
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    const openMenu = () => {
+      if (!menu) return;
+      menu.classList.remove('hidden');
+      menu.setAttribute('aria-hidden', 'false');
+      toggle?.setAttribute('aria-expanded', 'true');
+      barTop?.classList.add('-translate-y-0', 'rotate-45');
+      barTop?.classList.remove('-translate-y-[5px]');
+      barBot?.classList.add('translate-y-0', '-rotate-45');
+      barBot?.classList.remove('translate-y-[3px]');
+      requestAnimationFrame(() => {
+        items.forEach((el) => el.setAttribute('data-open', 'true'));
+      });
+      document.body.style.overflow = 'hidden';
+    };
+    const closeMenu = () => {
+      if (!menu) return;
+      toggle?.setAttribute('aria-expanded', 'false');
+      barTop?.classList.remove('-translate-y-0', 'rotate-45');
+      barTop?.classList.add('-translate-y-[5px]');
+      barBot?.classList.remove('translate-y-0', '-rotate-45');
+      barBot?.classList.add('translate-y-[3px]');
+      items.forEach((el) => el.removeAttribute('data-open'));
+      document.body.style.overflow = '';
+      setTimeout(() => {
+        menu.classList.add('hidden');
+        menu.setAttribute('aria-hidden', 'true');
+      }, 400);
+    };
+
+    toggle?.addEventListener('click', () => {
+      const expanded = toggle.getAttribute('aria-expanded') === 'true';
+      expanded ? closeMenu() : openMenu();
+    });
+    backdrop?.addEventListener('click', closeMenu);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeMenu();
+    });
+    const mq = window.matchMedia('(min-width: 1024px)');
+    mq.addEventListener('change', (e) => e.matches && closeMenu());
+  })();
+</script>

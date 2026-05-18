@@ -1,0 +1,592 @@
+---
+/**
+ * Servicios.astro — Asymmetric bento editorial.
+ * Rompe el grid 4x2 genérico. Una "feature card" grande + listado editorial numerado.
+ */
+export interface Props {
+  compact?: boolean;
+}
+const { compact = false } = Astro.props;
+
+// Icon set — Lucide-style strokes
+const ICONS: Record<string, string> = {
+  penal:       '<path d="M12 3v18M5 9l7-3 7 3M5 9c0 3 3 5 7 5s7-2 7-5M5 9v2c0 3 3 5 7 5s7-2 7-5V9M8 21h8"/>',
+  civil:       '<path d="M3 21h18M5 21V10l7-5 7 5v11M9 21v-6h6v6"/>',
+  laboral:     '<path d="M3 7h18v13H3z"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M3 12h18"/>',
+  divorcio:    '<path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.5"/><path d="M12 21s7-4.5 7-10a4 4 0 0 0-7-2.5"/><path d="m9 9 6 6m0-6-6 6"/>',
+  migracion:   '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>',
+  empresarial: '<path d="M3 21V8l9-5 9 5v13"/><path d="M3 21h18M9 21v-6h6v6M9 11h.01M15 11h.01M9 15h.01M15 15h.01"/>',
+  contratos:   '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/>',
+  familiar:    '<circle cx="8" cy="9" r="3"/><circle cx="16" cy="9" r="3"/><path d="M2 20c0-3 3-5 6-5s6 2 6 5M10 20c0-3 3-5 6-5s6 2 6 5"/>',
+};
+
+const featured = {
+  id: 'penal',
+  num: '01',
+  title: 'Derecho Penal',
+  desc: 'Defensa estratégica en procesos penales, audiencias preliminares, recursos y casación. Acompañamiento desde la detención hasta sentencia firme.',
+  meta: 'Materia más demandada · 2024',
+  icon: 'penal',
+  long:
+    'Asumimos la defensa técnica desde el primer momento de la persecución penal: detención, audiencia inicial, formulación de cargos, debate y eventuales recursos. Cada expediente lo dirige un abogado del bufete con responsabilidad nominal y comunicación directa con el cliente y la familia.',
+  bullets: [
+    'Defensa en delitos contra la propiedad, la vida y la libertad personal',
+    'Audiencias preliminares, formales y de medidas cautelares',
+    'Recursos de apelación, casación y amparo',
+    'Salidas alternas, acuerdos reparatorios y suspensión condicional',
+    'Asistencia en investigaciones del Ministerio Público',
+  ],
+};
+
+const servicios = [
+  {
+    id: 'civil', num: '02', title: 'Derecho Civil',
+    desc: 'Sucesiones, propiedad, daños y perjuicios, contratos privados.',
+    icon: 'civil',
+    long: 'Asistencia en disputas patrimoniales y de propiedad, con estrategia conservadora y honorarios fijos. Tramitamos sucesiones, regularizaciones registrales y reclamaciones civiles ante juzgados de letras y cortes de apelaciones.',
+    bullets: [
+      'Sucesiones testadas e intestadas',
+      'Reclamaciones por daños y perjuicios',
+      'Compraventa, arrendamiento y propiedad horizontal',
+      'Contratos privados entre particulares',
+      'Regularización de bienes inmuebles',
+    ],
+  },
+  {
+    id: 'laboral', num: '03', title: 'Derecho Laboral',
+    desc: 'Despidos injustificados, prestaciones, conciliaciones y reinstalaciones.',
+    icon: 'laboral',
+    long: 'Representamos a trabajadores y, en casos seleccionados, a pequeñas empresas en disputas laborales ante la Secretaría del Trabajo y los juzgados laborales. Buscamos conciliaciones cuando son ventajosas y litigamos cuando no.',
+    bullets: [
+      'Cálculo y reclamo de prestaciones laborales',
+      'Despidos injustificados y reinstalaciones',
+      'Mediación ante la Secretaría del Trabajo',
+      'Liquidaciones y finiquitos',
+      'Asesoría en contratos individuales y colectivos',
+    ],
+  },
+  {
+    id: 'divorcio', num: '04', title: 'Divorcios',
+    desc: 'Procesos voluntarios y contenciosos. Custodia, bienes y pensión.',
+    icon: 'divorcio',
+    long: 'Acompañamos divorcios voluntarios (más rápidos y económicos) y contenciosos con un enfoque humano. Cuando hay menores, priorizamos acuerdos de custodia que preserven el vínculo y la estabilidad emocional.',
+    bullets: [
+      'Divorcio voluntario por mutuo consentimiento',
+      'Divorcio contencioso ante juzgado de familia',
+      'Custodia, régimen de visitas y pensión alimenticia',
+      'División de bienes y patrimonio conyugal',
+      'Mediación familiar previa al litigio',
+    ],
+  },
+  {
+    id: 'migracion', num: '05', title: 'Migración',
+    desc: 'Visas, residencias, naturalización y trámites consulares.',
+    icon: 'migracion',
+    long: 'Asesoramos a hondureños dentro y fuera del país en trámites migratorios. Desde residencias permanentes hasta gestiones consulares en EE.UU., España y Centroamérica, con corresponsales acreditados.',
+    bullets: [
+      'Residencias temporales y permanentes en Honduras',
+      'Naturalización y nacionalidad hondureña',
+      'Trámites consulares y poderes desde el exterior',
+      'Reunificación familiar',
+      'Asesoría en visas humanitarias y de protección',
+    ],
+  },
+  {
+    id: 'empresarial', num: '06', title: 'Asesoría Empresarial',
+    desc: 'Sociedades, contratos comerciales y cumplimiento corporativo.',
+    icon: 'empresarial',
+    long: 'Apoyamos a empresas pequeñas y medianas en su operación legal cotidiana: constitución, contratos, gobierno corporativo y cumplimiento. Trabajamos con honorarios mensuales fijos cuando el cliente lo prefiere.',
+    bullets: [
+      'Constitución y registro de sociedades mercantiles',
+      'Redacción de contratos comerciales y de servicios',
+      'Acuerdos de socios y estatutos corporativos',
+      'Cumplimiento regulatorio y tributario básico',
+      'Resolución extrajudicial de disputas comerciales',
+    ],
+  },
+  {
+    id: 'contratos', num: '07', title: 'Contratos',
+    desc: 'Redacción y revisión de contratos privados y mercantiles.',
+    icon: 'contratos',
+    long: 'Redactamos y revisamos contratos a la medida, en lenguaje claro pero técnicamente sólido. Buscamos cláusulas balanceadas que protejan a nuestro cliente sin romper la relación con la contraparte.',
+    bullets: [
+      'Compraventa, arrendamiento y comodato',
+      'Contratos de servicios profesionales y laborales',
+      'Contratos mercantiles, distribución y suministro',
+      'Convenios de confidencialidad y no competencia',
+      'Cesiones, mandatos y poderes notariales',
+    ],
+  },
+  {
+    id: 'familiar', num: '08', title: 'Derecho Familiar',
+    desc: 'Adopciones, pensiones, tutelas, capitulaciones y mediación.',
+    icon: 'familiar',
+    long: 'Materia delicada que abordamos con discreción. Tramitamos asuntos familiares ante juzgados especializados, priorizando soluciones que preserven el bienestar de los menores y la unidad familiar cuando es viable.',
+    bullets: [
+      'Pensiones alimenticias y su revisión',
+      'Adopciones nacionales e internacionales',
+      'Tutelas, curatelas y declaratorias',
+      'Capitulaciones matrimoniales',
+      'Mediación familiar y acuerdos parentales',
+    ],
+  },
+];
+
+const allServices = [featured, ...servicios];
+---
+
+<section class="pt-10 lg:pt-16 pb-24 lg:pb-32 bg-bone relative" id="servicios" aria-labelledby="servicios-title">
+  <div class="container-x">
+    {!compact && (
+      <div class="grid lg:grid-cols-12 gap-8 lg:gap-16 items-end reveal">
+        <div class="lg:col-span-7">
+          <span class="eyebrow">
+            <span class="num">02</span>
+            <span class="bar"></span>
+            Áreas de práctica
+          </span>
+          <h2 id="servicios-title" class="section-title">
+            Ocho materias.
+            <span class="display-italic text-oxblood">Un solo</span> estándar
+            de ejecución.
+          </h2>
+        </div>
+        <div class="lg:col-span-5">
+          <p class="section-lede">
+            No subcontratamos casos. Cada expediente lo lleva un abogado del
+            bufete con responsabilidad nominal y comunicación directa al
+            cliente — ya sea un despido injustificado o una sucesión millonaria.
+          </p>
+        </div>
+      </div>
+    )}
+
+    <!-- ASYMMETRIC BENTO -->
+    <div class="mt-16 lg:mt-24 grid lg:grid-cols-12 gap-5 lg:gap-6">
+      <!-- FEATURED CARD (large, dark) -->
+      <a
+        href="/servicios"
+        data-service-id="penal"
+        class="reveal group lg:col-span-7 lg:row-span-2 relative
+               rounded-bezel-outer p-8 lg:p-12 min-h-[420px] lg:min-h-[520px]
+               bg-mesh-oxblood text-bone-50
+               ring-1 ring-bone-50/10 overflow-hidden
+               transition-all duration-700 ease-editorial
+               hover:ring-bone-50/20 hover:shadow-deep cursor-pointer"
+      >
+        <!-- Watermark numeral -->
+        <span
+          class="absolute -right-6 -bottom-10 font-display
+                 text-[20rem] leading-none text-bone-50/[0.04]
+                 select-none pointer-events-none tracking-tightest"
+          aria-hidden="true"
+        >
+          {featured.num}
+        </span>
+
+        <div class="relative flex flex-col h-full">
+          <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-bronze-light/80 tabular">
+            {featured.num} · {featured.meta}
+          </span>
+          <h3 class="font-display mt-6 text-[clamp(2.25rem,4.5vw,4rem)] leading-[0.98] tracking-[-0.035em] text-bone-50 max-w-[16ch]">
+            {featured.title}.
+            <span class="display-italic text-bronze-light"> Defensa</span>
+            estratégica.
+          </h3>
+          <p class="mt-6 max-w-[42ch] text-bone-50/75 leading-relaxed">
+            {featured.desc}
+          </p>
+          <div class="mt-auto pt-10 inline-flex items-center gap-3 text-sm text-bone-50/90">
+            <span class="font-mono text-[11px] uppercase tracking-[0.22em]">Ver materia</span>
+            <span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-bone-50/10 ring-1 ring-bone-50/15 transition-all duration-500 ease-editorial group-hover:translate-x-1 group-hover:bg-bronze group-hover:text-ink group-hover:ring-bronze">
+              <svg viewBox="0 0 16 16" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 8h10M9 4l4 4-4 4"/>
+              </svg>
+            </span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Two compact cards stacked next to featured -->
+      {servicios.slice(0, 2).map((s, i) => (
+        <a
+          href="/servicios"
+          data-service-id={s.id}
+          class="reveal editorial-card editorial-card--dyn lg:col-span-5 group"
+          style={`transition-delay: ${(i + 1) * 80}ms`}
+        >
+          <div class="flex items-start justify-between">
+            <span class="icon-tile">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={ICONS[s.icon]} />
+            </span>
+            <span class="index card-num">{s.num}</span>
+          </div>
+          <h3>{s.title}</h3>
+          <p class="mt-3 text-sm text-ink/65 leading-relaxed">{s.desc}</p>
+          <div class="card-cta">
+            <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-ink/55 group-hover:text-oxblood transition-colors duration-500">Ver materia</span>
+            <span class="card-arrow">
+              <svg viewBox="0 0 16 16" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 8h10M9 4l4 4-4 4"/>
+              </svg>
+            </span>
+          </div>
+          <span class="card-bar" aria-hidden="true"></span>
+        </a>
+      ))}
+
+      <!-- Remaining cards in 4-col flow row -->
+      {servicios.slice(2).map((s, i) => (
+        <a
+          href="/servicios"
+          data-service-id={s.id}
+          class="reveal editorial-card editorial-card--dyn lg:col-span-3 group"
+          style={`transition-delay: ${(i + 1) * 60}ms`}
+        >
+          <div class="flex items-start justify-between">
+            <span class="icon-tile">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={ICONS[s.icon]} />
+            </span>
+            <span class="index card-num">{s.num}</span>
+          </div>
+          <h3 class="text-xl lg:text-2xl">{s.title}</h3>
+          <p class="mt-3 text-sm text-ink/65 leading-relaxed">{s.desc}</p>
+          <div class="card-cta">
+            <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-ink/55 group-hover:text-oxblood transition-colors duration-500">Ver materia</span>
+            <span class="card-arrow">
+              <svg viewBox="0 0 16 16" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 8h10M9 4l4 4-4 4"/>
+              </svg>
+            </span>
+          </div>
+          <span class="card-bar" aria-hidden="true"></span>
+        </a>
+      ))}
+    </div>
+  </div>
+
+  <!-- SERVICE DETAIL MODAL -->
+  <div
+    id="service-modal"
+    class="service-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="service-modal-title"
+    aria-hidden="true"
+  >
+    <div class="service-modal__backdrop" data-modal-close></div>
+    <div class="service-modal__shell" role="document">
+      <button
+        type="button"
+        class="service-modal__close"
+        aria-label="Cerrar"
+        data-modal-close
+      >
+        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 6l12 12M18 6l-6 6 -6 6"/>
+        </svg>
+      </button>
+
+      <div class="service-modal__grid">
+        <aside class="service-modal__aside">
+          <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-bronze-light/80" data-modal-num>—</span>
+          <span class="service-modal__icon" data-modal-icon aria-hidden="true"></span>
+          <p class="font-mono text-[10px] uppercase tracking-[0.22em] text-bone-50/45 mt-auto">
+            Bufete Villatoro<br/>& Asociados
+          </p>
+        </aside>
+
+        <div class="service-modal__body">
+          <h3 id="service-modal-title" class="font-display text-[clamp(1.75rem,3vw,2.75rem)] leading-[1.05] tracking-[-0.02em] text-ink" data-modal-title>—</h3>
+          <p class="mt-5 text-ink/75 leading-relaxed text-pretty" data-modal-long>—</p>
+
+          <div class="mt-8">
+            <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-bronze mb-4">
+              Servicios incluidos
+            </p>
+            <ul class="space-y-3" data-modal-bullets></ul>
+          </div>
+
+          <div class="mt-10 pt-6 border-t border-ink/10 flex flex-wrap gap-3">
+            <a id="service-modal-wa" href="#" target="_blank" rel="noopener" class="btn-ink">
+              Consultar por WhatsApp
+              <span class="btn-dot">
+                <svg viewBox="0 0 16 16" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 8h10M9 4l4 4-4 4"/>
+                </svg>
+              </span>
+            </a>
+            <a href="/contacto" class="btn-ghost">Agendar consulta</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script is:inline define:vars={{ services: allServices, icons: ICONS }}>
+  (function () {
+    const modal = document.getElementById('service-modal');
+    if (!modal) return;
+    const titleEl = modal.querySelector('[data-modal-title]');
+    const longEl  = modal.querySelector('[data-modal-long]');
+    const numEl   = modal.querySelector('[data-modal-num]');
+    const iconEl  = modal.querySelector('[data-modal-icon]');
+    const bulletsEl = modal.querySelector('[data-modal-bullets]');
+    const waLink  = document.getElementById('service-modal-wa');
+    const triggers = document.querySelectorAll('[data-service-id]');
+    let lastFocused = null;
+
+    const PHONE = '50498404016';
+
+    const open = (id) => {
+      const data = services.find((s) => s.id === id);
+      if (!data) return;
+      lastFocused = document.activeElement;
+      titleEl.textContent = data.title;
+      longEl.textContent = data.long;
+      numEl.textContent = `${data.num} · Área de práctica`;
+      iconEl.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">${icons[data.icon] || ''}</svg>`;
+      bulletsEl.innerHTML = data.bullets.map((b, i) => `
+        <li class="grid grid-cols-[40px_1fr] gap-3 items-baseline pb-3 border-b border-ink/8">
+          <span class="font-mono tabular text-[10px] text-bronze">${String(i + 1).padStart(2, '0')}</span>
+          <span class="text-ink/80 text-[15px] leading-snug">${b}</span>
+        </li>
+      `).join('');
+      const waMsg = encodeURIComponent(`Hola, me gustaría una consulta sobre ${data.title}.`);
+      waLink.setAttribute('href', `https://wa.me/${PHONE}?text=${waMsg}`);
+      modal.setAttribute('data-open', 'true');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      requestAnimationFrame(() => {
+        modal.querySelector('.service-modal__close')?.focus();
+      });
+    };
+
+    const close = () => {
+      modal.removeAttribute('data-open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
+    };
+
+    triggers.forEach((el) => {
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        const id = el.getAttribute('data-service-id');
+        if (id) open(id);
+      });
+    });
+
+    modal.querySelectorAll('[data-modal-close]').forEach((el) => {
+      el.addEventListener('click', close);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.getAttribute('data-open') === 'true') close();
+    });
+  })();
+</script>
+
+<style>
+  .editorial-card--dyn {
+    overflow: hidden;
+    isolation: isolate;
+    transition-duration: 600ms;
+  }
+  .editorial-card--dyn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: radial-gradient(120% 80% at 0% 100%, rgba(168,122,75,0.10) 0%, transparent 55%);
+    opacity: 0;
+    transition: opacity 700ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .editorial-card--dyn:hover::before { opacity: 1; }
+  .editorial-card--dyn:hover { transform: translateY(-6px); }
+
+  .editorial-card--dyn .icon-tile {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px; width: 44px;
+    border-radius: 14px;
+    background: rgba(59,31,31,0.04);
+    color: rgb(59,31,31);
+    transition: all 600ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .editorial-card--dyn .icon-tile svg { height: 22px; width: 22px; }
+  .editorial-card--dyn:hover .icon-tile {
+    background: rgb(91,18,28);
+    color: rgb(244,232,213);
+    transform: rotate(-6deg) scale(1.08);
+  }
+
+  .editorial-card--dyn .card-num {
+    transition: all 600ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .editorial-card--dyn:hover .card-num {
+    color: rgb(91,18,28);
+    letter-spacing: 0.32em;
+  }
+
+  .editorial-card--dyn h3 {
+    transition: color 600ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .editorial-card--dyn:hover h3 { color: rgb(91,18,28); }
+
+  .editorial-card--dyn .card-cta {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(59,31,31,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .editorial-card--dyn .card-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 28px; width: 28px;
+    border-radius: 999px;
+    background: rgba(59,31,31,0.05);
+    color: rgba(59,31,31,0.5);
+    transition: all 600ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .editorial-card--dyn:hover .card-arrow {
+    background: rgb(91,18,28);
+    color: rgb(244,232,213);
+    transform: translateX(4px);
+  }
+
+  .editorial-card--dyn .card-bar {
+    position: absolute;
+    left: 0; bottom: 0;
+    height: 3px; width: 0;
+    background: linear-gradient(90deg, rgb(91,18,28) 0%, rgb(168,122,75) 100%);
+    transition: width 800ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .editorial-card--dyn:hover .card-bar { width: 100%; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .editorial-card--dyn,
+    .editorial-card--dyn *,
+    .editorial-card--dyn::before {
+      transition: none !important;
+      transform: none !important;
+    }
+  }
+
+  /* ---------- SERVICE MODAL ---------- */
+  .service-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 70;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 400ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .service-modal[data-open='true'] {
+    pointer-events: auto;
+    opacity: 1;
+  }
+  .service-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(20, 14, 14, 0.55);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .service-modal__shell {
+    position: relative;
+    width: min(960px, 100%);
+    max-height: 90dvh;
+    overflow: hidden;
+    background: rgb(244, 232, 213);
+    border-radius: 28px;
+    box-shadow: 0 30px 80px -20px rgba(20, 14, 14, 0.55);
+    transform: translateY(20px) scale(0.98);
+    transition: transform 500ms cubic-bezier(0.32, 0.72, 0, 1);
+    display: flex;
+    flex-direction: column;
+  }
+  .service-modal[data-open='true'] .service-modal__shell {
+    transform: translateY(0) scale(1);
+  }
+  .service-modal__close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: 40px;
+    border-radius: 999px;
+    background: rgba(59, 31, 31, 0.06);
+    color: rgba(59, 31, 31, 0.7);
+    transition: all 300ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .service-modal__close:hover {
+    background: rgb(91, 18, 28);
+    color: rgb(244, 232, 213);
+    transform: rotate(90deg);
+  }
+  .service-modal__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  @media (min-width: 768px) {
+    .service-modal__grid {
+      grid-template-columns: 240px 1fr;
+    }
+  }
+  .service-modal__aside {
+    background: radial-gradient(120% 100% at 0% 0%, rgba(91, 18, 28, 1) 0%, rgba(59, 18, 24, 1) 100%);
+    color: rgb(244, 232, 213);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    min-height: 200px;
+  }
+  .service-modal__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 64px;
+    width: 64px;
+    border-radius: 18px;
+    background: rgba(244, 232, 213, 0.1);
+    color: rgb(212, 175, 138);
+    ring: 1px solid rgba(244, 232, 213, 0.15);
+  }
+  .service-modal__icon svg {
+    height: 32px;
+    width: 32px;
+  }
+  .service-modal__body {
+    padding: 2rem 2rem 2.5rem;
+  }
+  @media (min-width: 768px) {
+    .service-modal__body {
+      padding: 3rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .service-modal,
+    .service-modal__shell,
+    .service-modal__close {
+      transition: none !important;
+      transform: none !important;
+    }
+  }
+</style>

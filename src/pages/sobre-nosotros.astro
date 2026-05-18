@@ -1,0 +1,44 @@
+---
+/**
+ * sobre-nosotros.astro — Página de presentación del bufete.
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import SobreAbogado from '@components/SobreAbogado.astro';
+import Testimonios from '@components/Testimonios.astro';
+import Contacto from '@components/Contacto.astro';
+
+const title = 'Sobre Nosotros | Villatoro & Asociados';
+const description =
+  'Conozca al Lic. Darwin Villatoro y al equipo del Bufete Jurídico Villatoro & Asociados. Más de 5 años defendiendo a familias y empresas en Honduras.';
+---
+
+<BaseLayout title={title} description={description}>
+  <section class="bg-bone relative pt-8 pb-12 lg:pt-12 lg:pb-20">
+    <div class="container-x">
+      <div class="grid lg:grid-cols-12 gap-8 lg:gap-16 items-end reveal">
+        <div class="lg:col-span-8">
+          <span class="eyebrow">
+            <span class="num">03</span>
+            <span class="bar"></span>
+            El bufete
+          </span>
+          <h1 class="section-title">
+            Construido sobre
+            <span class="display-italic text-oxblood">cinco años</span>
+            de práctica.
+          </h1>
+        </div>
+        <div class="lg:col-span-4">
+          <p class="section-lede">
+            Desde 2021 representamos a hondureños dentro y fuera del país.
+            Conozca quiénes somos, qué principios nos rigen y cómo trabajamos.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <SobreAbogado />
+  <Testimonios />
+  <Contacto />
+</BaseLayout>

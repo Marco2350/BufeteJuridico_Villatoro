@@ -1,0 +1,150 @@
+---
+/**
+ * Footer.astro — Editorial. Big wordmark + colofón.
+ */
+const year = new Date().getFullYear();
+const phone = '50498404016';
+
+const enlaces = [
+  { href: '/', label: 'Inicio' },
+  { href: '/servicios', label: 'Servicios' },
+  { href: '/sobre-nosotros', label: 'Bufete' },
+  { href: '/contacto', label: 'Contacto' },
+];
+
+const areas = [
+  'Derecho Penal',
+  'Derecho Civil',
+  'Derecho Laboral',
+  'Divorcios',
+  'Migración',
+  'Asesoría Empresarial',
+];
+---
+
+<footer class="bg-ink text-bone-50 relative overflow-hidden">
+  <!-- Top hairline of bronze -->
+  <div class="h-px w-full bg-bronze/40"></div>
+
+  <div class="container-x pt-20 pb-10">
+    <!-- TOP: huge wordmark + colofón -->
+    <div class="grid lg:grid-cols-12 gap-10 lg:gap-16 items-end pb-16 border-b border-bone-50/10">
+      <div class="lg:col-span-7">
+        <div class="flex items-center gap-5 mb-6">
+          <img
+            src="/images/logo-mark-white.png"
+            alt="Sello DV — Villatoro y Asociados"
+            class="h-20 w-20 lg:h-24 lg:w-24 object-contain"
+            width="160" height="160"
+            loading="lazy"
+          />
+          <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-bone-50/45 leading-relaxed">
+            Bufete jurídico<br/>Honduras · Est. 2021
+          </p>
+        </div>
+        <h2 class="font-display text-[clamp(3rem,9vw,8rem)] leading-[0.9] tracking-[-0.045em] text-bone-50">
+          Villatoro<span class="text-bronze">.</span>
+          <span class="display-italic block text-bone-50/55 text-[0.65em] mt-1">
+            y asociados
+          </span>
+        </h2>
+      </div>
+      <div class="lg:col-span-5 space-y-4">
+        <p class="text-bone-50/70 leading-relaxed max-w-sm">
+          Defensa legal seria al alcance de la clase media hondureña.
+          Honorarios fijos por escrito. Sin sorpresas.
+        </p>
+        <a href="/contacto" class="btn-bone !bg-bone-50 !text-ink !border-transparent">
+          Agendar consulta
+          <span class="btn-dot !bg-ink/10">
+            <svg viewBox="0 0 16 16" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 8h10M9 4l4 4-4 4"/>
+            </svg>
+          </span>
+        </a>
+      </div>
+    </div>
+
+    <!-- MIDDLE: nav columns -->
+    <div class="grid lg:grid-cols-12 gap-10 lg:gap-12 py-16">
+      <div class="lg:col-span-3">
+        <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-bronze-light/70 mb-5">
+          Navegación
+        </p>
+        <ul class="space-y-3">
+          {enlaces.map((l) => (
+            <li>
+              <a href={l.href} class="font-display text-lg text-bone-50/85 hover:text-bronze-light transition-colors">
+                {l.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="lg:col-span-3">
+        <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-bronze-light/70 mb-5">
+          Materias
+        </p>
+        <ul class="space-y-3">
+          {areas.map((a) => (
+            <li>
+              <a href="/servicios" class="text-sm text-bone-50/70 hover:text-bone-50 transition-colors">
+                {a}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="lg:col-span-3">
+        <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-bronze-light/70 mb-5">
+          Contacto
+        </p>
+        <address class="not-italic text-sm text-bone-50/75 leading-relaxed space-y-3">
+          <p>San Pedro Sula<br/>Honduras</p>
+          <p class="tabular">
+            <a href={`tel:+${phone}`} class="hover:text-bronze-light transition-colors block">+504 9840-4016</a>
+            <a href={`https://wa.me/${phone}`} target="_blank" rel="noopener" class="hover:text-bronze-light transition-colors block">WhatsApp</a>
+          </p>
+        </address>
+      </div>
+
+      <div class="lg:col-span-3">
+        <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-bronze-light/70 mb-5">
+          Horario
+        </p>
+        <p class="text-sm text-bone-50/75 leading-relaxed tabular">
+          Lun – Vie · 8:00 a 18:00<br/>
+          Sábado · 9:00 a 13:00<br/>
+          Domingo · cerrado
+        </p>
+        <div class="mt-6 flex items-center gap-2">
+          {[
+            { href: 'https://facebook.com/villatoroasociados', label: 'FB' },
+            { href: 'https://instagram.com/villatoroasociados', label: 'IG' },
+            { href: 'https://linkedin.com/company/villatoroasociados', label: 'LI' },
+          ].map((r) => (
+            <a
+              href={r.href} target="_blank" rel="noopener"
+              aria-label={r.label}
+              class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-bone-50/10 text-bone-50/70 ring-1 ring-bone-50/10 hover:bg-bronze hover:text-ink hover:ring-bronze transition-all duration-500 ease-editorial font-mono text-[10px] tracking-wider"
+            >
+              {r.label}
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- COLOFÓN -->
+    <div class="mt-10 pt-6 border-t border-bone-50/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <p class="font-mono text-[10px] uppercase tracking-[0.22em] text-bone-50/45 tabular">
+        © {year} · Villatoro & Asociados · Todos los derechos reservados
+      </p>
+      <p class="font-mono text-[10px] uppercase tracking-[0.22em] text-bone-50/45">
+        San Pedro Sula · Cortés · Honduras 15°30′N
+      </p>
+    </div>
+  </div>
+</footer>

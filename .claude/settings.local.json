@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(New-Item *)",
+      "Skill(redesign-existing-projects)",
+      "Bash(npx astro *)",
+      "Bash(npm run *)"
+    ]
+  }
+}

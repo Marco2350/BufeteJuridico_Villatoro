@@ -1,0 +1,259 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =========================================================
+   BASE — Editorial Luxury
+   ========================================================= */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  :root {
+    --bone: #f2ede4;
+    --bone-50: #faf7f1;
+    --ink: #1a1614;
+    --oxblood: #3b1f1f;
+    --oxblood-deep: #2a1414;
+    --bronze: #a87a4b;
+    --bronze-light: #c39a6f;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-bone text-ink font-sans antialiased;
+    font-feature-settings: 'ss01', 'ss02', 'cv11';
+    font-variation-settings: 'wght' 400;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: var(--oxblood);
+    color: var(--bone-50);
+  }
+
+  /* Editorial scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #e6dfd1;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--oxblood);
+    border-radius: 2px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--oxblood-deep);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--bronze);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* Display type — Fraunces variable */
+  h1, h2, h3, h4 {
+    @apply font-display text-ink;
+    font-variation-settings: 'wght' 480, 'SOFT' 30, 'opsz' 144;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+
+  /* Tabular numerals for data, addresses, prices */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* =========================================================
+   COMPONENTS — Editorial system
+   ========================================================= */
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-[1440px] px-6 sm:px-10 lg:px-16;
+  }
+
+  /* --- Eyebrow: editorial numbered label (replaces gold-line) --- */
+  .eyebrow {
+    @apply inline-flex items-baseline gap-3 font-mono text-[11px] uppercase
+           tracking-[0.22em] text-ink/60;
+  }
+  .eyebrow .num {
+    @apply text-bronze tabular-nums;
+  }
+  .eyebrow .bar {
+    @apply inline-block w-6 h-px bg-ink/30 translate-y-[-3px];
+  }
+
+  /* --- Section titles --- */
+  .section-title {
+    @apply font-display text-[clamp(2.25rem,5vw,4.25rem)]
+           leading-[1.02] text-ink mt-6;
+    letter-spacing: -0.035em;
+  }
+
+  .section-lede {
+    @apply mt-6 max-w-[58ch] text-base sm:text-lg text-ink/70 leading-relaxed;
+    text-wrap: pretty;
+  }
+
+  /* --- Buttons: island architecture with button-in-button --- */
+  .btn {
+    @apply inline-flex items-center gap-3
+           pl-6 pr-2 py-2 rounded-full text-sm font-medium tracking-tight
+           transition-all duration-500 ease-editorial
+           active:scale-[0.98] will-change-transform;
+  }
+  .btn-ink {
+    @apply btn bg-ink text-bone-50 hover:bg-oxblood;
+  }
+  .btn-bone {
+    @apply btn bg-bone-50 text-ink border border-ink/10
+           hover:border-ink/30 hover:shadow-soft;
+  }
+  .btn-ghost {
+    @apply btn pr-6 text-ink/80 hover:text-ink;
+  }
+  .btn-whatsapp {
+    @apply btn bg-[#1F3F2F] text-bone-50 hover:bg-[#2a5240];
+  }
+
+  /* Button-in-button trailing icon dot — magnetic on parent .btn hover */
+  .btn-dot {
+    @apply inline-flex h-9 w-9 items-center justify-center rounded-full
+           bg-bone-50/15 text-current
+           transition-all duration-500 ease-editorial;
+  }
+  .btn-dot--invert {
+    @apply bg-ink/10;
+  }
+  .btn:hover .btn-dot {
+    transform: translateX(4px) scale(1.05);
+  }
+
+  /* --- Double-bezel card (Doppelrand) --- */
+  .bezel {
+    @apply relative rounded-bezel-outer p-1.5
+           bg-gradient-to-b from-ink/[0.04] to-ink/[0.02]
+           ring-1 ring-ink/10;
+  }
+  .bezel-inner {
+    @apply relative rounded-bezel-inner bg-bone-50
+           shadow-[inset_0_1px_0_rgba(255,250,240,0.7)];
+  }
+  .bezel-dark {
+    @apply relative rounded-bezel-outer p-1.5
+           bg-gradient-to-b from-white/[0.06] to-white/[0.02]
+           ring-1 ring-white/10;
+  }
+  .bezel-dark .bezel-inner {
+    @apply bg-oxblood-900
+           shadow-[inset_0_1px_0_rgba(255,250,240,0.08)];
+  }
+
+  /* --- Magnetic service card --- */
+  .editorial-card {
+    @apply relative block bg-bone-50 rounded-[20px] p-7 lg:p-8
+           ring-1 ring-ink/10
+           transition-all duration-700 ease-editorial
+           hover:-translate-y-1 hover:shadow-editorial hover:ring-ink/15
+           will-change-transform;
+  }
+  .editorial-card .index {
+    @apply font-mono text-[11px] uppercase tracking-[0.2em] text-bronze tabular-nums;
+  }
+  .editorial-card h3 {
+    @apply font-display text-2xl lg:text-3xl text-ink mt-3 leading-[1.05];
+  }
+
+  /* --- Reveal on scroll (heavy editorial fade-up) --- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    filter: blur(6px);
+    transition: opacity 900ms cubic-bezier(0.32, 0.72, 0, 1),
+                transform 900ms cubic-bezier(0.32, 0.72, 0, 1),
+                filter 900ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+
+  /* --- Decorative rule (replaces gold-line) --- */
+  .rule {
+    @apply block h-px w-full bg-ink/10;
+  }
+  .rule-bronze {
+    @apply block h-px w-full bg-bronze/40;
+  }
+
+  /* --- Tag pill --- */
+  .pill {
+    @apply inline-flex items-center gap-2 rounded-full
+           px-3 py-1 text-[11px] uppercase tracking-[0.18em] font-mono
+           bg-ink/5 text-ink/70 ring-1 ring-ink/10;
+  }
+  .pill-dark {
+    @apply bg-bone-50/10 text-bone-50/80 ring-bone-50/20;
+  }
+}
+
+/* =========================================================
+   UTILITIES
+   ========================================================= */
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+  .text-pretty  { text-wrap: pretty; }
+  .mask-fade-b {
+    mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+  }
+  .display-italic {
+    font-style: italic;
+    font-variation-settings: 'wght' 460, 'SOFT' 100, 'opsz' 144;
+  }
+}
+
+/* =========================================================
+   FIXED GRAIN OVERLAY (paper texture)
+   ========================================================= */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 320 320' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.105 0 0 0 0 0.084 0 0 0 0 0.076 0 0 0 0.10 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+}

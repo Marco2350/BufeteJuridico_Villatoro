@@ -1,0 +1,162 @@
+---
+/**
+ * SobreAbogado.astro — Biografía editorial. Texto a la izquierda + retrato lateral.
+ */
+const especialidades = [
+  'Derecho Penal y Procesal Penal',
+  'Derecho Civil y Sucesorio',
+  'Derecho de Familia y Divorcios',
+  'Derecho Migratorio',
+  'Asesoría Corporativa',
+];
+
+const valores = [
+  { num: '01', t: 'Reserva',       d: 'El expediente, las partes y los honorarios no se discuten fuera del bufete.' },
+  { num: '02', t: 'Honorarios fijos', d: 'Pactados por escrito al inicio. Sin recargos ni horas misteriosas.' },
+  { num: '03', t: 'Comunicación',  d: 'Un abogado responsable nominal. Reporte semanal en casos activos.' },
+  { num: '04', t: 'Conservador',   d: 'Estrategia prudente. No prometemos lo que no es litigable.' },
+];
+
+const certificaciones = [
+  { y: '—', l: 'Licenciatura en Derecho — Universidad Nacional Autónoma de Honduras en el Valle de Sula (UNAH-VS)' },
+  { y: '2021', l: 'Fundación del bufete · San Pedro Sula' },
+];
+---
+
+<section class="py-24 lg:py-40 bg-bone-50 relative" id="sobre" aria-labelledby="sobre-title">
+  <div class="container-x">
+    <div class="grid lg:grid-cols-12 gap-10 lg:gap-16">
+      <!-- TEXT -->
+      <div class="lg:col-span-7 reveal">
+        <div class="flex items-start gap-6 mb-6">
+          <img
+            src="/images/logo-mark.png"
+            alt=""
+            class="h-14 w-14 lg:h-16 lg:w-16 object-contain opacity-90 flex-shrink-0"
+            width="120" height="120"
+            loading="lazy"
+            aria-hidden="true"
+          />
+          <span class="eyebrow mt-2">
+            <span class="num">03</span>
+            <span class="bar"></span>
+            El bufete
+          </span>
+        </div>
+        <h2 id="sobre-title" class="section-title">
+          Cinco años defendiendo
+          <span class="display-italic text-oxblood">lo que importa</span>
+          a hondureños y empresas.
+        </h2>
+
+        <div class="mt-10 grid sm:grid-cols-2 gap-8 max-w-2xl">
+          <p class="text-ink/75 leading-relaxed text-pretty">
+            El <strong class="text-ink">Lic. Darwin Villatoro</strong> fundó
+            este bufete en 2021 con un principio simple: que la asesoría legal
+            seria estuviera al alcance de la clase media hondureña.
+          </p>
+          <p class="text-ink/75 leading-relaxed text-pretty">
+            Hoy contamos con más de 15 casos resueltos bajo un estándar uniforme:
+            estrategia prudente, comunicación constante y honorarios sin sorpresas.
+          </p>
+        </div>
+
+        <!-- ESPECIALIDADES -->
+        <div class="mt-14">
+          <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-ink/45 mb-5">
+            Especialidades del titular
+          </p>
+          <ul class="grid sm:grid-cols-2 gap-x-10 gap-y-3 max-w-2xl">
+            {especialidades.map((e, i) => (
+              <li class="flex items-baseline gap-4 text-[15px] text-ink/85 border-b border-ink/10 pb-3">
+                <span class="font-mono text-[10px] tabular text-bronze">{String(i + 1).padStart(2, '0')}</span>
+                <span class="leading-snug">{e}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <!-- PORTRAIT + signature -->
+      <aside class="lg:col-span-5 reveal" style="transition-delay: 120ms;">
+        <figure class="bezel">
+          <div class="bezel-inner overflow-hidden">
+            <div class="relative aspect-[4/5]">
+              <img
+                src="/images/abogado-sentado.png"
+                alt="Lic. Darwin Villatoro en su despacho — Bufete Villatoro & Asociados"
+                width="900"
+                height="1100"
+                loading="lazy"
+                decoding="async"
+                class="h-full w-full object-cover object-[center_20%]"
+              />
+            </div>
+          </div>
+        </figure>
+
+        <div class="mt-6 flex items-end justify-between gap-4 px-2">
+          <div>
+            <p class="font-display italic text-3xl text-ink leading-none">
+              D. Villatoro
+            </p>
+            <p class="mt-2 font-mono text-[10px] uppercase tracking-[0.22em] text-ink/55">
+              Abogado titular
+            </p>
+          </div>
+          <p class="text-right">
+            <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-ink/45">Despacho</span><br/>
+            <span class="font-display tabular text-2xl text-ink">2021</span>
+          </p>
+        </div>
+      </aside>
+    </div>
+
+    <!-- VALORES — strip editorial -->
+    <div class="mt-24 lg:mt-32 reveal">
+      <span class="eyebrow">
+        <span class="num">04</span>
+        <span class="bar"></span>
+        Principios de práctica
+      </span>
+      <div class="mt-10 grid sm:grid-cols-2 lg:grid-cols-4 border-t border-ink/10">
+        {valores.map((v) => (
+          <div class="border-b lg:border-b-0 lg:border-r border-ink/10 last:border-r-0 px-6 py-8 hover:bg-bone transition-colors duration-500">
+            <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-bronze tabular">{v.num}</span>
+            <h4 class="font-display text-2xl text-ink mt-3 leading-tight">{v.t}</h4>
+            <p class="mt-3 text-sm text-ink/70 leading-relaxed">{v.d}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- CREDENCIALES — timeline editorial -->
+    <div class="mt-24 lg:mt-32 reveal">
+      <div class="bezel-dark bg-mesh-oxblood">
+        <div class="bezel-inner !bg-transparent p-10 lg:p-16">
+          <div class="grid lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+            <div class="lg:col-span-4">
+              <span class="eyebrow">
+                <span class="num text-bronze-light">05</span>
+                <span class="bar !bg-bone-50/30"></span>
+                <span class="text-bone-50/60">Credenciales</span>
+              </span>
+              <h3 class="font-display text-3xl lg:text-4xl text-bone-50 mt-6 leading-tight">
+                Formación y trayectoria
+                <span class="display-italic text-bronze-light">documentada.</span>
+              </h3>
+            </div>
+            <ol class="lg:col-span-8 space-y-0">
+              {certificaciones.map((c) => (
+                <li class="grid grid-cols-[80px_1fr] gap-6 items-baseline py-5 border-b border-bone-50/10 last:border-b-0">
+                  <span class="font-mono tabular text-base text-bronze-light">{c.y}</span>
+                  <span class="text-bone-50/90 leading-relaxed">{c.l}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,134 @@
+---
+/**
+ * Hero.astro — Image-forward editorial hero.
+ * Foto del abogado dominante, ocupa el lado derecho desde el borde.
+ * Copy condensado a la izquierda. Todo visible en viewport.
+ */
+const phone = '50498404016';
+const whatsappLink = `https://wa.me/${phone}?text=${encodeURIComponent(
+  'Hola, me gustaría agendar una consulta legal.'
+)}`;
+
+const kpis = [
+  { k: '+15', l: 'Casos resueltos' },
+  { k: '5', l: 'Años de experiencia' },
+];
+---
+
+<section
+  class="relative bg-bone overflow-hidden isolate"
+  aria-labelledby="hero-title"
+>
+  <!-- Ambient warmth -->
+  <div
+    class="absolute inset-0 -z-10 pointer-events-none"
+    style="background-image: radial-gradient(55% 45% at 5% 100%, rgba(168,122,75,0.10) 0, transparent 60%), radial-gradient(40% 35% at 100% 10%, rgba(59,31,31,0.06) 0, transparent 70%);"
+    aria-hidden="true"
+  ></div>
+
+  <div class="container-x">
+    <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 items-stretch min-h-[calc(100dvh-96px)] py-8 lg:py-10">
+
+      <!-- LEFT: copy column (condensada) -->
+      <div class="lg:col-span-6 xl:col-span-5 flex flex-col justify-between">
+        <!-- Meta -->
+        <div class="flex items-center justify-between flex-wrap gap-4 reveal">
+          <span class="eyebrow">
+            <span class="num">01</span>
+            <span class="bar"></span>
+            Honduras · Est. 2021
+          </span>
+          <img
+            src="/images/logo-mark-white.png"
+            alt="Sello DV — Villatoro y Asociados"
+            class="h-10 w-10 object-contain opacity-80"
+            width="80" height="80"
+            loading="eager"
+          />
+        </div>
+
+        <!-- Headline -->
+        <div class="reveal" style="transition-delay: 80ms;">
+          <h1
+            id="hero-title"
+            class="font-display
+                   text-[clamp(2.5rem,6vw,5.5rem)] leading-[0.95]
+                   tracking-[-0.04em] text-ink"
+          >
+            Asesoría legal
+            <span class="display-italic text-oxblood">sin ruido,</span>
+            con consecuencia.
+          </h1>
+
+          <p class="mt-6 lg:mt-8 text-base lg:text-lg text-ink/70 leading-[1.55] text-pretty max-w-[44ch]">
+            Defendemos patrimonios, libertad y familias en Honduras desde 2021.
+            Honorarios fijos por escrito antes de contratar.
+          </p>
+
+          <div class="mt-8 flex flex-wrap items-center gap-3">
+            <a href={whatsappLink} target="_blank" rel="noopener" class="btn-ink">
+              Agendar consulta
+              <span class="btn-dot">
+                <svg viewBox="0 0 16 16" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 8h10M9 4l4 4-4 4"/>
+                </svg>
+              </span>
+            </a>
+            <a href="/servicios" class="btn-ghost">
+              Áreas de práctica
+            </a>
+          </div>
+        </div>
+
+        <!-- KPIs at bottom -->
+        <dl class="reveal grid grid-cols-2 gap-4 lg:gap-8 border-t border-ink/10 pt-6 mt-8" style="transition-delay: 160ms;">
+          {kpis.map((item) => (
+            <div class="flex flex-col">
+              <dt class="font-display tabular text-[clamp(1.75rem,3.5vw,2.75rem)] leading-none text-ink tracking-tighter">
+                {item.k}
+              </dt>
+              <dd class="mt-2 font-mono text-[10px] uppercase tracking-[0.2em] text-ink/55 leading-snug">
+                {item.l}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+
+      <!-- RIGHT: dominant portrait, edge-bleed on desktop -->
+      <div class="lg:col-span-6 xl:col-span-7 relative reveal" style="transition-delay: 120ms;">
+        <figure class="bezel h-full">
+          <div class="bezel-inner overflow-hidden h-full">
+            <div class="relative h-full min-h-[420px] lg:min-h-0">
+              <img
+                src="/images/abogado-pie.png"
+                alt="Lic. Darwin Villatoro, abogado titular del Bufete Villatoro & Asociados en su despacho, San Pedro Sula"
+                width="1200"
+                height="800"
+                loading="eager"
+                decoding="async"
+                fetchpriority="high"
+                class="absolute inset-0 h-full w-full object-cover object-[center_30%]"
+              />
+              <!-- Editorial caption strip -->
+              <figcaption class="absolute left-5 right-5 bottom-5 flex items-end justify-between gap-3">
+                <div class="bg-bone-50/85 backdrop-blur-md rounded-full px-4 py-2 ring-1 ring-ink/10">
+                  <p class="font-mono text-[10px] uppercase tracking-[0.22em] text-ink/65">
+                    Lic. Darwin Villatoro
+                  </p>
+                </div>
+                <div class="bg-ink/85 backdrop-blur-md rounded-full px-4 py-2 ring-1 ring-bone-50/10">
+                  <p class="font-mono text-[10px] uppercase tracking-[0.22em] text-bone-50/85">
+                    Abogado titular
+                  </p>
+                </div>
+              </figcaption>
+            </div>
+          </div>
+        </figure>
+      </div>
+
+    </div>
+
+  </div>
+</section>

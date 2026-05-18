@@ -1,0 +1,279 @@
+---
+/**
+ * Contacto.astro — Formulario editorial. Info contact en bezel oscuro.
+ */
+export interface Props {
+  compact?: boolean;
+}
+const { compact = false } = Astro.props;
+const phone = '50498404016';
+const phoneDisplay = '+504 9840-4016';
+const address = 'San Pedro Sula, Honduras';
+---
+
+<section class:list={["bg-bone relative", compact ? "pt-8 pb-24 lg:pt-12 lg:pb-32" : "py-24 lg:py-40"]} id="contacto" aria-labelledby="contacto-title">
+  <div class="container-x">
+    <div class="grid lg:grid-cols-12 gap-10 lg:gap-16 items-end reveal">
+      <div class="lg:col-span-7">
+        <span class="eyebrow">
+          <span class="num">08</span>
+          <span class="bar"></span>
+          Hablemos
+        </span>
+        <h2 id="contacto-title" class="section-title">
+          Su consulta es
+          <span class="display-italic text-oxblood">el primer paso.</span>
+        </h2>
+      </div>
+      <div class="lg:col-span-5">
+        <p class="section-lede">
+          Complete el formulario y un abogado del bufete se comunicará con
+          usted en menos de 24 horas hábiles. Primera consulta sin costo,
+          honorarios fijos por escrito antes de contratar.
+        </p>
+      </div>
+    </div>
+
+    <div class="mt-16 lg:mt-20 grid lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+      <!-- INFO PANEL (oxblood bezel) -->
+      <aside class="lg:col-span-5 reveal">
+        <div class="bezel-dark bg-mesh-oxblood">
+          <div class="bezel-inner !bg-transparent p-9 lg:p-12">
+            <span class="eyebrow">
+              <span class="num text-bronze-light">A</span>
+              <span class="bar !bg-bone-50/30"></span>
+              <span class="text-bone-50/60">Vías directas</span>
+            </span>
+            <h3 class="font-display text-3xl lg:text-4xl text-bone-50 mt-6 leading-tight">
+              Estamos a un mensaje
+              <span class="display-italic text-bronze-light">de distancia.</span>
+            </h3>
+
+            <ul class="mt-10 space-y-6">
+              <li class="grid grid-cols-[60px_1fr] gap-4 items-baseline pb-5 border-b border-bone-50/10">
+                <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-bone-50/45">Tel.</span>
+                <a href={`tel:+${phone}`} class="font-display text-xl text-bone-50 hover:text-bronze-light transition-colors tabular">
+                  {phoneDisplay}
+                </a>
+              </li>
+              <li class="grid grid-cols-[60px_1fr] gap-4 items-baseline pb-5 border-b border-bone-50/10">
+                <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-bone-50/45">WApp</span>
+                <a href={`https://wa.me/${phone}`} target="_blank" rel="noopener" class="font-display text-xl text-bone-50 hover:text-bronze-light transition-colors tabular">
+                  {phoneDisplay}
+                </a>
+              </li>
+              <li class="grid grid-cols-[60px_1fr] gap-4 items-baseline pb-5 border-b border-bone-50/10">
+                <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-bone-50/45">Sede</span>
+                <p class="text-sm text-bone-50/85 leading-relaxed">{address}</p>
+              </li>
+              <li class="grid grid-cols-[60px_1fr] gap-4 items-baseline">
+                <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-bone-50/45">Hor.</span>
+                <p class="text-sm text-bone-50/85 leading-relaxed tabular">
+                  Lun – Vie · 8:00 a 18:00<br/>
+                  Sábado · 9:00 a 13:00
+                </p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+
+      <!-- FORM -->
+      <div class="lg:col-span-7 reveal" style="transition-delay: 100ms;">
+        <div class="bezel">
+          <div class="bezel-inner p-8 lg:p-12">
+            <form id="contact-form" novalidate>
+              <div class="grid sm:grid-cols-2 gap-x-6 gap-y-7">
+                <!-- Nombre -->
+                <div class="sm:col-span-2">
+                  <label for="nombre" class="block font-mono text-[10px] uppercase tracking-[0.22em] text-ink/55 mb-2">
+                    Nombre completo *
+                  </label>
+                  <input
+                    type="text" id="nombre" name="nombre" required minlength="3" autocomplete="name"
+                    class="w-full bg-transparent border-0 border-b border-ink/15
+                           px-0 py-3 text-lg text-ink placeholder:text-ink/30
+                           focus:border-oxblood focus:outline-none transition-colors"
+                    placeholder="Ej: Juana Mejía Carrasco"
+                  />
+                  <p class="error-msg font-mono text-[11px] text-red-700 mt-2 hidden">Ingrese su nombre completo (mín. 3 caracteres).</p>
+                </div>
+
+                <div>
+                  <label for="telefono" class="block font-mono text-[10px] uppercase tracking-[0.22em] text-ink/55 mb-2">
+                    Teléfono *
+                  </label>
+                  <input
+                    type="tel" id="telefono" name="telefono" required
+                    pattern="[0-9+\-\s\(\)]{8,15}" autocomplete="tel"
+                    class="w-full bg-transparent border-0 border-b border-ink/15
+                           px-0 py-3 text-lg text-ink placeholder:text-ink/30 tabular
+                           focus:border-oxblood focus:outline-none transition-colors"
+                    placeholder="+504 9999-9999"
+                  />
+                  <p class="error-msg font-mono text-[11px] text-red-700 mt-2 hidden">Ingrese un número válido.</p>
+                </div>
+
+                <div>
+                  <label for="email" class="block font-mono text-[10px] uppercase tracking-[0.22em] text-ink/55 mb-2">
+                    Correo *
+                  </label>
+                  <input
+                    type="email" id="email" name="email" required autocomplete="email"
+                    class="w-full bg-transparent border-0 border-b border-ink/15
+                           px-0 py-3 text-lg text-ink placeholder:text-ink/30
+                           focus:border-oxblood focus:outline-none transition-colors"
+                    placeholder="usted@correo.com"
+                  />
+                  <p class="error-msg font-mono text-[11px] text-red-700 mt-2 hidden">Ingrese un correo válido.</p>
+                </div>
+
+                <div class="sm:col-span-2">
+                  <label for="caso" class="block font-mono text-[10px] uppercase tracking-[0.22em] text-ink/55 mb-2">
+                    Tipo de caso *
+                  </label>
+                  <select
+                    id="caso" name="caso" required
+                    class="w-full bg-transparent border-0 border-b border-ink/15
+                           px-0 py-3 text-lg text-ink
+                           focus:border-oxblood focus:outline-none transition-colors"
+                  >
+                    <option value="">Seleccione un área legal</option>
+                    <option>Derecho Penal</option>
+                    <option>Derecho Civil</option>
+                    <option>Derecho Laboral</option>
+                    <option>Divorcio</option>
+                    <option>Migración</option>
+                    <option>Asesoría Empresarial</option>
+                    <option>Contratos</option>
+                    <option>Derecho Familiar</option>
+                    <option>Otro</option>
+                  </select>
+                  <p class="error-msg font-mono text-[11px] text-red-700 mt-2 hidden">Seleccione el tipo de caso.</p>
+                </div>
+
+                <div class="sm:col-span-2">
+                  <label for="mensaje" class="block font-mono text-[10px] uppercase tracking-[0.22em] text-ink/55 mb-2">
+                    Descripción del caso *
+                  </label>
+                  <textarea
+                    id="mensaje" name="mensaje" required minlength="15" rows="4"
+                    class="w-full bg-transparent border-0 border-b border-ink/15
+                           px-0 py-3 text-lg text-ink placeholder:text-ink/30 resize-none
+                           focus:border-oxblood focus:outline-none transition-colors"
+                    placeholder="Cuéntenos brevemente. Toda la información es confidencial."
+                  ></textarea>
+                  <p class="error-msg font-mono text-[11px] text-red-700 mt-2 hidden">Mínimo 15 caracteres.</p>
+                </div>
+              </div>
+
+              <label class="mt-8 flex items-start gap-3 text-xs text-ink/60 cursor-pointer">
+                <input type="checkbox" required name="consentimiento"
+                       class="mt-0.5 h-4 w-4 accent-oxblood" />
+                <span class="leading-relaxed">
+                  Acepto el tratamiento confidencial de mis datos para fines de
+                  consulta legal, bajo secreto profesional del Colegio de Abogados de Honduras.
+                </span>
+              </label>
+
+              <div class="mt-10 flex flex-col sm:flex-row gap-3 items-start">
+                <button type="submit" class="btn-ink w-full sm:w-auto">
+                  Enviar consulta
+                  <span class="btn-dot">
+                    <svg viewBox="0 0 16 16" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M3 8h10M9 4l4 4-4 4"/>
+                    </svg>
+                  </span>
+                </button>
+                <button type="button" id="send-whatsapp" class="btn-whatsapp w-full sm:w-auto">
+                  Por WhatsApp
+                  <span class="btn-dot">
+                    <svg viewBox="0 0 16 16" class="h-3.5 w-3.5" fill="currentColor" aria-hidden="true">
+                      <path d="M8.03 1.34a6.64 6.64 0 0 0-5.65 10.06L1.34 14.66l3.4-1a6.62 6.62 0 0 0 3.29.84h.01a6.65 6.65 0 0 0 0-13.16zm3.93 9.42c-.16.46-.95.88-1.32.93-.33.05-.76.07-1.23-.08-.28-.09-.65-.21-1.11-.4-1.94-.84-3.21-2.79-3.31-2.92-.1-.13-.8-1.07-.8-2.03 0-.97.51-1.44.69-1.64.18-.2.39-.25.52-.25.13 0 .26 0 .37.01.12.01.29-.05.45.34.16.4.55 1.37.6 1.47.05.1.08.21.01.34-.07.13-.1.21-.19.32-.1.11-.21.26-.3.35-.1.1-.2.2-.09.4.11.2.51.84 1.1 1.36.75.67 1.38.88 1.58.97.2.1.31.08.42-.05.11-.13.49-.57.62-.76.13-.19.26-.16.44-.1.18.07 1.13.53 1.32.63.2.1.33.15.37.23.05.08.05.47-.11.93z"/>
+                    </svg>
+                  </span>
+                </button>
+              </div>
+
+              <div
+                id="form-success"
+                class="mt-8 hidden p-5 bg-bone border border-ink/15 rounded-2xl text-sm text-ink"
+                role="status"
+              >
+                <p class="font-display text-lg">Gracias. Recibimos su consulta.</p>
+                <p class="mt-1 text-ink/70">Un abogado del bufete le contactará en menos de 24 horas hábiles.</p>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  (function () {
+    const PHONE = '50498404016';
+    const form = document.getElementById('contact-form');
+    const success = document.getElementById('form-success');
+    const sendWA = document.getElementById('send-whatsapp');
+    if (!form) return;
+
+    const showError = (input, show) => {
+      const errorMsg = input.parentElement?.querySelector('.error-msg');
+      if (!errorMsg) return;
+      errorMsg.classList.toggle('hidden', !show);
+      input.classList.toggle('border-red-500', show);
+      input.classList.toggle('border-ink/15', !show);
+    };
+
+    const validate = () => {
+      let ok = true;
+      const fields = form.querySelectorAll('input[required], select[required], textarea[required]');
+      fields.forEach((field) => {
+        if (field.type === 'checkbox') {
+          if (!field.checked) ok = false;
+          return;
+        }
+        const valid = field.checkValidity();
+        showError(field, !valid);
+        if (!valid) ok = false;
+      });
+      return ok;
+    };
+
+    form.querySelectorAll('input, select, textarea').forEach((field) => {
+      field.addEventListener('blur', () => {
+        if (field.type !== 'checkbox') showError(field, !field.checkValidity());
+      });
+    });
+
+    const buildMessage = () => {
+      const data = new FormData(form);
+      return (
+        `Hola, soy ${data.get('nombre')}.\n` +
+        `Teléfono: ${data.get('telefono')}\n` +
+        `Email: ${data.get('email')}\n` +
+        `Tipo de caso: ${data.get('caso')}\n\n` +
+        `Mensaje:\n${data.get('mensaje')}`
+      );
+    };
+
+    const sendWhatsApp = () => {
+      if (!validate()) return;
+      const msg = encodeURIComponent(buildMessage());
+      window.open(`https://wa.me/${PHONE}?text=${msg}`, '_blank', 'noopener');
+    };
+
+    sendWA?.addEventListener('click', sendWhatsApp);
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!validate()) return;
+      sendWhatsApp();
+      success?.classList.remove('hidden');
+      form.reset();
+      setTimeout(() => success?.classList.add('hidden'), 6000);
+    });
+  })();
+</script>

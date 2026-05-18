@@ -1,0 +1,45 @@
+---
+/**
+ * servicios.astro — Página dedicada a las áreas de práctica.
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Servicios from '@components/Servicios.astro';
+import FAQ from '@components/FAQ.astro';
+import Contacto from '@components/Contacto.astro';
+
+const title = 'Servicios Legales | Villatoro & Asociados';
+const description =
+  'Áreas de práctica del Bufete Jurídico Villatoro & Asociados: derecho penal, civil, laboral, divorcios, migración, asesoría empresarial, contratos y derecho familiar en Honduras.';
+---
+
+<BaseLayout title={title} description={description}>
+  <section class="bg-bone relative pt-8 pb-12 lg:pt-12 lg:pb-20">
+    <div class="container-x">
+      <div class="grid lg:grid-cols-12 gap-8 lg:gap-16 items-end reveal">
+        <div class="lg:col-span-8">
+          <span class="eyebrow">
+            <span class="num">02</span>
+            <span class="bar"></span>
+            Áreas de práctica
+          </span>
+          <h1 class="section-title">
+            Ocho materias.
+            <span class="display-italic text-oxblood">Una sola</span>
+            metodología.
+          </h1>
+        </div>
+        <div class="lg:col-span-4">
+          <p class="section-lede">
+            El equipo cubre las principales materias del derecho hondureño con
+            honorarios fijos pactados al inicio y un abogado responsable nominal
+            por expediente.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Servicios compact={true} />
+  <FAQ />
+  <Contacto />
+</BaseLayout>

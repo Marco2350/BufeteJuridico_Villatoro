@@ -1,0 +1,116 @@
+---
+/**
+ * FAQ.astro — Acordeón editorial. Sticky-title izquierda + listado tipográfico derecha.
+ */
+const faqs = [
+  {
+    q: '¿Cuánto cuesta una consulta inicial?',
+    a: 'La primera consulta es gratuita y sin compromiso. Evaluamos el caso, planteamos las estrategias jurídicas posibles y entregamos un presupuesto fijo por escrito antes de que usted decida contratarnos.',
+  },
+  {
+    q: '¿Atienden casos fuera de San Pedro Sula?',
+    a: 'Sí. Tenemos clientes activos en Tegucigalpa, La Ceiba, Choloma y Puerto Cortés. Para casos en otras zonas ofrecemos consultas virtuales y representamos por medio de poderes a través de corresponsales acreditados.',
+  },
+  {
+    q: '¿Cuánto tiempo toma resolver un caso típico?',
+    a: 'Depende del proceso. Un divorcio voluntario se resuelve en 2 a 4 meses; un caso penal o civil contencioso puede tomar de 1 a 3 años. Entregamos un cronograma estimado tras analizar el expediente.',
+  },
+  {
+    q: '¿Manejan planes de pago?',
+    a: 'Sí. Trabajamos con honorarios fijos pactados al inicio y planes de pago según la complejidad del caso. Nunca cobramos por hora ni añadimos cargos sin acuerdo previo por escrito.',
+  },
+  {
+    q: '¿Cómo garantizan la confidencialidad?',
+    a: 'Toda comunicación está protegida por el secreto profesional regulado por el Colegio de Abogados de Honduras. No discutimos casos fuera del bufete, no compartimos identidades de clientes y los expedientes se archivan bajo acceso restringido.',
+  },
+  {
+    q: '¿Asisten hondureños en el exterior?',
+    a: 'Sí. Atendemos trámites consulares, residencias, naturalización, visas humanitarias y reunificación familiar para hondureños en EE.UU., España y Centroamérica.',
+  },
+];
+---
+
+<section class="py-24 lg:py-40 bg-bone-50 relative" aria-labelledby="faq-title">
+  <div class="container-x">
+    <div class="grid lg:grid-cols-12 gap-12 lg:gap-16">
+      <!-- LEFT: sticky title -->
+      <div class="lg:col-span-5 lg:sticky lg:top-32 self-start reveal">
+        <span class="eyebrow">
+          <span class="num">07</span>
+          <span class="bar"></span>
+          Preguntas frecuentes
+        </span>
+        <h2 id="faq-title" class="section-title">
+          Lo que más nos
+          <span class="display-italic text-oxblood">preguntan.</span>
+        </h2>
+        <p class="section-lede">
+          Si su duda no aparece aquí, escríbanos por WhatsApp o agende una
+          consulta gratuita. Respondemos en menos de 24 horas hábiles.
+        </p>
+        <a href="/contacto" class="btn-ink mt-10">
+          Hacer mi pregunta
+          <span class="btn-dot">
+            <svg viewBox="0 0 16 16" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 8h10M9 4l4 4-4 4"/>
+            </svg>
+          </span>
+        </a>
+      </div>
+
+      <!-- RIGHT: editorial accordion -->
+      <div class="lg:col-span-7">
+        <ul class="border-t border-ink/15">
+          {faqs.map((item, idx) => (
+            <li class="reveal border-b border-ink/15" style={`transition-delay: ${idx * 50}ms`}>
+              <details
+                class="group py-5 lg:py-7"
+                data-faq-item
+              >
+                <summary class="flex items-baseline gap-6 cursor-pointer list-none">
+                  <span class="font-mono text-[11px] tabular text-bronze">
+                    {String(idx + 1).padStart(2, '0')}
+                  </span>
+                  <span class="flex-1 font-display text-xl lg:text-2xl text-ink leading-snug">
+                    {item.q}
+                  </span>
+                  <span
+                    class="inline-flex h-8 w-8 items-center justify-center rounded-full
+                           bg-ink/5 text-ink/60
+                           group-open:bg-ink group-open:text-bone-50 group-open:rotate-45
+                           transition-all duration-500 ease-editorial flex-shrink-0"
+                    aria-hidden="true"
+                  >
+                    <svg viewBox="0 0 16 16" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.5">
+                      <line x1="8" y1="3" x2="8" y2="13"/>
+                      <line x1="3" y1="8" x2="13" y2="8"/>
+                    </svg>
+                  </span>
+                </summary>
+                <div class="pl-[44px] pr-12 pt-4 text-ink/70 leading-relaxed text-pretty">
+                  {item.a}
+                </div>
+              </details>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  // Single-open accordion
+  (function () {
+    const items = document.querySelectorAll('[data-faq-item]');
+    items.forEach((item) => {
+      item.addEventListener('toggle', () => {
+        if (item.open) {
+          items.forEach((other) => {
+            if (other !== item && other.open) other.open = false;
+          });
+        }
+      });
+    });
+  })();
+</script>

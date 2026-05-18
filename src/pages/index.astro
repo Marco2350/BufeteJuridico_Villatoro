@@ -1,0 +1,25 @@
+---
+/**
+ * index.astro — Página de inicio
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/Hero.astro';
+import Servicios from '@components/Servicios.astro';
+import SobreAbogado from '@components/SobreAbogado.astro';
+import Testimonios from '@components/Testimonios.astro';
+import FAQ from '@components/FAQ.astro';
+import Contacto from '@components/Contacto.astro';
+
+const title = 'Bufete de Abogados en Honduras | Villatoro & Asociados';
+const description =
+  'Bufete legal en San Pedro Sula con 5 años de experiencia y más de 15 casos resueltos. Derecho penal, civil, laboral, divorcios, migración y asesoría empresarial. Primera consulta gratuita.';
+---
+
+<BaseLayout title={title} description={description}>
+  <Hero />
+  <Servicios />
+  <SobreAbogado />
+  <Testimonios />
+  <FAQ />
+  <Contacto />
+</BaseLayout>

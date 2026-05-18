@@ -1,0 +1,141 @@
+---
+/**
+ * SEO.astro
+ * --------------------------------------------------------------
+ * Componente reutilizable de metadatos: title, description,
+ * canonical, Open Graph, Twitter Cards y Structured Data JSON-LD
+ * para un despacho de abogados (LegalService) en Honduras.
+ */
+
+export interface Props {
+  title: string;
+  description: string;
+  image?: string;            // ruta relativa o absoluta
+  canonical?: string;        // si se omite, se calcula
+  keywords?: string[];
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description,
+  image = '/images/abogado-hero.png',
+  canonical,
+  keywords = [
+    'abogado en Honduras',
+    'abogado San Pedro Sula',
+    'bufete legal Honduras',
+    'abogado penalista Honduras',
+    'abogado divorcios Honduras',
+    'abogado migración Honduras',
+    'asesoría empresarial Honduras',
+    'notario público Honduras',
+  ],
+  noindex = false,
+} = Astro.props;
+
+const siteURL = Astro.site?.toString().replace(/\/$/, '') ?? 'https://villatoroasociados.hn';
+const pageURL = canonical ?? new URL(Astro.url.pathname, Astro.site ?? siteURL).toString();
+const imageURL = image.startsWith('http') ? image : `${siteURL}${image}`;
+const fullTitle = title.includes('Villatoro') ? title : `${title} | Bufete Jurídico Villatoro & Asociados`;
+
+// JSON-LD: LegalService — clave para SEO local de abogados
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'LegalService',
+  '@id': `${siteURL}/#legalservice`,
+  name: 'Bufete Jurídico Villatoro & Asociados — Abogados y Notarios',
+  description:
+    'Bufete legal en Honduras especializado en derecho penal, civil, laboral, familiar, migración y asesoría empresarial. 5 años de experiencia, más de 15 casos resueltos.',
+  url: siteURL,
+  logo: `${siteURL}/favicon.svg`,
+  image: imageURL,
+  telephone: '+504 9840-4016',
+  priceRange: '$$',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'San Pedro Sula',
+    addressRegion: 'Cortés',
+    addressCountry: 'HN',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: 15.5040,
+    longitude: -88.0250,
+  },
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+      opens: '08:00',
+      closes: '18:00',
+    },
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: 'Saturday',
+      opens: '09:00',
+      closes: '13:00',
+    },
+  ],
+  sameAs: [
+    'https://www.facebook.com/villatoroasociados',
+    'https://www.instagram.com/villatoroasociados',
+    'https://www.linkedin.com/company/villatoroasociados',
+  ],
+  areaServed: [
+    { '@type': 'AdministrativeArea', name: 'Honduras' },
+    { '@type': 'City', name: 'San Pedro Sula' },
+    { '@type': 'City', name: 'Tegucigalpa' },
+  ],
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Servicios Legales',
+    itemListElement: [
+      'Derecho Penal',
+      'Derecho Civil',
+      'Derecho Laboral',
+      'Divorcios',
+      'Migración',
+      'Asesoría Empresarial',
+      'Contratos',
+      'Derecho Familiar',
+    ].map((s) => ({
+      '@type': 'Offer',
+      itemOffered: { '@type': 'Service', name: s },
+    })),
+  },
+};
+---
+
+<!-- Metadatos primarios -->
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<meta name="keywords" content={keywords.join(', ')} />
+<meta name="author" content="Bufete Jurídico Villatoro & Asociados" />
+<meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow'} />
+<link rel="canonical" href={pageURL} />
+<meta name="language" content="es-HN" />
+<meta name="geo.region" content="HN" />
+<meta name="geo.placename" content="San Pedro Sula" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="es_HN" />
+<meta property="og:site_name" content="Bufete Jurídico Villatoro & Asociados" />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={pageURL} />
+<meta property="og:image" content={imageURL} />
+<meta property="og:image:alt" content="Bufete Villatoro & Asociados — Abogados en Honduras" />
+
+<!-- Twitter Cards -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={imageURL} />
+
+<!-- Theme color -->
+<meta name="theme-color" content="#0A1F44" />
+
+<!-- Structured Data: LegalService -->
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />

@@ -1,0 +1,154 @@
+---
+/**
+ * Testimonios.astro — Quote monumental rotativo. Sin cards genéricas ni avatares falsos.
+ */
+const testimonios = [
+  {
+    texto:
+      'El Lic. Villatoro resolvió la constitución de mi empresa en tiempo récord y nos ha acompañado en cada decisión legal desde entonces.',
+    nombre: 'María Fernanda López',
+    rol: 'Fundadora, Café Versalles · San Pedro Sula',
+    materia: 'Asesoría empresarial',
+  },
+  {
+    texto:
+      'Después de un despido injustificado pensé que no había salida. El bufete logró una conciliación que superó mis expectativas.',
+    nombre: 'Roberto Núñez Castillo',
+    rol: 'Comerciante · Tegucigalpa',
+    materia: 'Derecho laboral',
+  },
+  {
+    texto:
+      'Me asesoraron en mi trámite de residencia en Estados Unidos. Su orientación fue precisa y, sobre todo, honesta sobre cada paso.',
+    nombre: 'Ana Patricia Martínez',
+    rol: 'Profesional independiente · Choloma',
+    materia: 'Derecho migratorio',
+  },
+  {
+    texto:
+      'Un proceso sucesorio que arrastrábamos cuatro años se cerró en seis meses con la estrategia que propuso el despacho. Volvería a confiar sin dudar.',
+    nombre: 'José Luis Hernández',
+    rol: 'Caso civil · La Ceiba',
+    materia: 'Derecho civil',
+  },
+];
+---
+
+<section class="py-24 lg:py-40 bg-bone relative overflow-hidden" aria-labelledby="testimonios-title">
+  <div class="container-x">
+    <div class="flex items-end justify-between gap-10 flex-wrap reveal">
+      <div class="max-w-2xl">
+        <span class="eyebrow">
+          <span class="num">06</span>
+          <span class="bar"></span>
+          Clientes
+        </span>
+        <h2 id="testimonios-title" class="section-title">
+          Resultados
+          <span class="display-italic text-oxblood">verificables.</span>
+        </h2>
+      </div>
+      <div class="flex items-center gap-3">
+        <button
+          type="button"
+          class="h-12 w-12 rounded-full bg-bone-50 ring-1 ring-ink/10 text-ink/70 hover:text-ink hover:ring-ink/30 transition-all duration-500 ease-editorial active:scale-95"
+          aria-label="Testimonio anterior"
+          data-tm-prev
+        >
+          <svg viewBox="0 0 16 16" class="h-3.5 w-3.5 mx-auto" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M13 8H3M7 4L3 8l4 4"/>
+          </svg>
+        </button>
+        <button
+          type="button"
+          class="h-12 w-12 rounded-full bg-ink text-bone-50 hover:bg-oxblood transition-all duration-500 ease-editorial active:scale-95"
+          aria-label="Siguiente testimonio"
+          data-tm-next
+        >
+          <svg viewBox="0 0 16 16" class="h-3.5 w-3.5 mx-auto" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 8h10M9 4l4 4-4 4"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Rotating quote -->
+    <div class="mt-16 lg:mt-20 reveal">
+      <div class="bezel">
+        <div class="bezel-inner p-10 lg:p-16">
+          <div class="relative min-h-[280px] lg:min-h-[340px]" data-tm-track>
+            {testimonios.map((t, i) => (
+              <article
+                class="absolute inset-0 transition-all duration-700 ease-editorial data-[active=true]:opacity-100 data-[active=true]:translate-y-0 opacity-0 translate-y-6"
+                data-tm-slide
+                data-active={i === 0 ? 'true' : undefined}
+                aria-hidden={i !== 0}
+              >
+                <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 h-full">
+                  <div class="lg:col-span-3 flex flex-col justify-between">
+                    <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-bronze">
+                      {String(i + 1).padStart(2, '0')} / {String(testimonios.length).padStart(2, '0')}
+                    </span>
+                    <div class="hidden lg:block">
+                      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-ink/45 mb-1">
+                        Materia
+                      </p>
+                      <p class="font-display text-lg text-ink/80">{t.materia}</p>
+                    </div>
+                  </div>
+                  <div class="lg:col-span-9 flex flex-col justify-between">
+                    <blockquote class="font-display text-[clamp(1.5rem,2.5vw,2.4rem)] leading-[1.15] text-ink text-balance">
+                      <span class="text-bronze">“</span>{t.texto}<span class="text-bronze">”</span>
+                    </blockquote>
+                    <footer class="mt-10 pt-6 border-t border-ink/10">
+                      <p class="font-display text-xl text-ink leading-none">{t.nombre}</p>
+                      <p class="mt-2 font-mono text-[11px] uppercase tracking-[0.22em] text-ink/55">
+                        {t.rol}
+                      </p>
+                    </footer>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  (function () {
+    const slides = document.querySelectorAll('[data-tm-slide]');
+    const next = document.querySelector('[data-tm-next]');
+    const prev = document.querySelector('[data-tm-prev]');
+    if (!slides.length) return;
+    let i = 0;
+    const show = (idx) => {
+      slides.forEach((s, n) => {
+        if (n === idx) {
+          s.setAttribute('data-active', 'true');
+          s.setAttribute('aria-hidden', 'false');
+        } else {
+          s.removeAttribute('data-active');
+          s.setAttribute('aria-hidden', 'true');
+        }
+      });
+    };
+    next?.addEventListener('click', () => {
+      i = (i + 1) % slides.length;
+      show(i);
+    });
+    prev?.addEventListener('click', () => {
+      i = (i - 1 + slides.length) % slides.length;
+      show(i);
+    });
+    // Auto-rotate every 7s, pause on hover
+    let timer = setInterval(() => { i = (i + 1) % slides.length; show(i); }, 7000);
+    const track = document.querySelector('[data-tm-track]');
+    track?.addEventListener('mouseenter', () => clearInterval(timer));
+    track?.addEventListener('mouseleave', () => {
+      timer = setInterval(() => { i = (i + 1) % slides.length; show(i); }, 7000);
+    });
+  })();
+</script>

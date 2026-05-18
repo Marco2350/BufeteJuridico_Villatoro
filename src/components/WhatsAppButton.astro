@@ -1,0 +1,32 @@
+---
+/**
+ * WhatsAppButton.astro — Floating editorial pill (no neon green default).
+ */
+const phone = '50498404016';
+const message = encodeURIComponent(
+  'Hola, me gustaría agendar una consulta legal con el Bufete Jurídico Villatoro & Asociados.'
+);
+const href = `https://wa.me/${phone}?text=${message}`;
+---
+
+<a
+  href={href}
+  target="_blank"
+  rel="noopener"
+  aria-label="Contactar por WhatsApp"
+  class="group fixed bottom-6 right-6 z-40 inline-flex items-center gap-3
+         pl-5 pr-2 py-2 rounded-full
+         bg-ink text-bone-50 ring-1 ring-bronze/40
+         shadow-deep
+         transition-all duration-500 ease-editorial
+         hover:bg-oxblood hover:-translate-y-0.5 active:scale-[0.98]"
+>
+  <span class="font-mono text-[11px] uppercase tracking-[0.22em] hidden sm:inline">
+    WhatsApp
+  </span>
+  <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-bronze text-ink transition-all duration-500 ease-editorial group-hover:rotate-[8deg]">
+    <svg viewBox="0 0 32 32" class="h-5 w-5" fill="currentColor" aria-hidden="true">
+      <path d="M16.001 3C9.373 3 4 8.373 4 15c0 2.387.694 4.605 1.886 6.476L4 29l7.706-1.844A11.94 11.94 0 0 0 16.001 27C22.629 27 28 21.627 28 15S22.629 3 16.001 3zm0 21.6c-1.687 0-3.297-.456-4.703-1.32l-.337-.205-4.575 1.094 1.117-4.46-.218-.349A9.567 9.567 0 0 1 6.4 15c0-5.302 4.299-9.6 9.601-9.6 5.3 0 9.599 4.298 9.599 9.6 0 5.302-4.299 9.6-9.599 9.6zm5.286-7.18c-.289-.144-1.71-.844-1.974-.941-.265-.097-.458-.144-.65.144-.193.289-.747.94-.916 1.133-.169.193-.337.217-.626.072-.289-.144-1.22-.45-2.323-1.434-.859-.766-1.439-1.713-1.608-2.001-.169-.289-.018-.445.127-.589.131-.13.289-.337.434-.506.145-.169.193-.289.289-.482.097-.193.048-.361-.024-.506-.072-.144-.65-1.566-.89-2.144-.234-.563-.473-.487-.65-.495-.169-.008-.361-.01-.554-.01a1.06 1.06 0 0 0-.771.361c-.265.289-1.012.989-1.012 2.413s1.037 2.797 1.182 2.99c.144.193 2.043 3.12 4.951 4.374.692.299 1.232.478 1.653.611.694.221 1.326.19 1.825.115.557-.083 1.71-.699 1.95-1.374.241-.675.241-1.253.169-1.374-.072-.121-.265-.193-.554-.337z"/>
+    </svg>
+  </span>
+</a>
